@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaLock,
@@ -6,17 +7,29 @@ import {
   FaTwitter,
   FaGoogle,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 export const SignInPage = () => {
+  const handleChange = function () {};
+
+  const handleSubmit = () => {
+    alert("form detected!");
+  };
+
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    alert("hello world");
+  };
 
   const handleSignUp = () => navigate("/signUp");
 
   return (
     <main className="flex items-center justify-center h-screen bg-gradient-to-r from-blue1 to-green1">
       <section className="flex flex-col items-center justify-center border-solid">
-        <form className="border-4 rounded-lg bg-white p-10 shadow-lg">
+        <form
+          onSubmit={handleSubmit}
+          className="border-4 rounded-lg bg-white p-10 shadow-lg"
+        >
           <h3 className="flex justify-center text-7xl pt-10 pb-10 font-bold text-gray-800">
             Login
           </h3>
@@ -52,6 +65,7 @@ export const SignInPage = () => {
             <button
               className="flex justify-center items-center h-10 w-[20rem] bg-blue1 text-white text-xl font-bold hover:bg-blue-600 transition-all duration-300 ease-in-out"
               type="submit"
+              onClick={handleClick}
             >
               Log in
             </button>

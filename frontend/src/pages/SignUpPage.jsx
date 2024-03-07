@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaLock,
@@ -8,26 +9,59 @@ import {
   FaEnvelope,
   FaPhone,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 export const RegisterPage = () => {
+  const [values, setValues] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+  });
   const navigate = useNavigate();
+
+  const handleClick = () => {
+    alert("button clicked");
+  };
+
+  const handleSubmit = () => {
+    alert("form submitted!");
+  };
+
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
 
   const handleSignIn = () => navigate("/signIn");
 
   return (
     <main className="flex items-center justify-center h-screen bg-gradient-to-r from-blue1 to-green1">
       <section className="flex flex-col items-center justify-center border-solid">
-        <form className="border-4 rounded-lg bg-white p-10 shadow-lg">
+        <form
+          onSubmit={handleSubmit}
+          className="border-4 rounded-lg bg-white p-10 shadow-lg"
+        >
           <h3 className="flex justify-center text-7xl pt-10 pb-10 font-bold text-gray-800">
             Register
           </h3>
+          <div className="input-box flex items-center border-b-2 border-gray-200 py-2 px-4 mb-4">
+            <FaEnvelope className="text-gray-400 mr-2" />
+            <input
+              className="border-none w-full focus:outline-none text-gray-600"
+              type="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleChange}
+            />
+          </div>
           <div className="input-box flex items-center border-b-2 border-gray-200 py-2 px-4 mb-4">
             <FaUser className="text-gray-400 mr-2" />
             <input
               className="border-none w-full focus:outline-none text-gray-600"
               type="text"
+              name="username"
               placeholder="Username"
+              onChange={handleChange}
             />
           </div>
           <div className="input-box flex items-center border-b-2 border-gray-200 py-2 px-4 mb-4">
@@ -36,6 +70,8 @@ export const RegisterPage = () => {
               className="border-none w-full focus:outline-none text-gray-600"
               type="password"
               placeholder="Password"
+              name="password"
+              onChange={handleChange}
             />
           </div>
           <div className="input-box flex items-center border-b-2 border-gray-200 py-2 px-4 mb-4">
@@ -44,22 +80,19 @@ export const RegisterPage = () => {
               className="border-none w-full focus:outline-none text-gray-600"
               type="password"
               placeholder="Confirm password"
+              name="confirmPassword"
+              onChange={handleChange}
             />
           </div>
-          <div className="input-box flex items-center border-b-2 border-gray-200 py-2 px-4 mb-4">
-            <FaEnvelope className="text-gray-400 mr-2" />
-            <input
-              className="border-none w-full focus:outline-none text-gray-600"
-              type="email"
-              placeholder="Email"
-            />
-          </div>
+
           <div className="input-box flex items-center border-b-2 border-gray-200 py-2 px-4 mb-4">
             <FaPhone className="text-gray-400 mr-2" />
             <input
               className="border-none w-full focus:outline-none text-gray-600"
               type="tel"
               placeholder="Phone number"
+              name="phone"
+              onChange={handleChange}
             />
           </div>
 
@@ -74,6 +107,7 @@ export const RegisterPage = () => {
             <button
               className="flex justify-center items-center h-10 w-[20rem] bg-blue1 text-white text-xl font-bold hover:bg-blue-600 transition-all duration-300 ease-in-out"
               type="submit"
+              onClick={handleClick}
             >
               Sign Up!
             </button>
