@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   FaUser,
   FaLock,
@@ -23,9 +25,34 @@ export const RegisterPage = () => {
   const handleClick = () => {
     alert("button clicked");
   };
+ 
+  const handleValidation = () => {
+    const { password,confirmPassword, username ,email} = values;
+    
+    if (password !== confirmPassword) {
+     alert('both passwords should be the same')
+     return false;
+    } else if (username.lenght < 3) {
+     alert('username should be greater than 3 characters')
+     return false;
+    } else if (password.lenght < 8) {
+     alert('password should be greater than 8 characters')
+     return false;
+    } else if (email === "") {
+     alert("email is required")
+     return false;
+    } else {
+     return true;
+    }
+    
+  }
 
-  const handleSubmit = () => {
-    alert("form submitted!");
+  const handleSubmit = (e) => {
+    e.preventDefault;
+    if (handleValidation) {
+     alert("handle Submit working OK")
+    }
+    
   };
 
   const handleChange = (e) => {
