@@ -51,7 +51,7 @@ const AuthButtons = ({ handleSignIn, handleSignUp }) => (
         onClick={handleSignUp}
         className="bg-blue2 py-2 px-4 rounded-full text-white"
       >
-        Try Brain.fm for free
+        Try Unscripted for free
       </button>
     </li>
   </ul>
@@ -125,7 +125,7 @@ const FrontPage = () => {
   const handleGift = () => navigate("/gift");
 
   return (
-    <header className="bg-green1 text-white">
+    <header className="bg-green1 text-white pt-5">
       <nav className="flex justify-between container mx-auto">
         <div className="flex flex-row items-center">
           {" "}

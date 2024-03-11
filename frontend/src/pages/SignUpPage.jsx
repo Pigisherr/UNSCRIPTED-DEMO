@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Axios } from "axios";
+
 import {
   FaUser,
   FaLock,
@@ -16,20 +20,39 @@ export const RegisterPage = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    phone: "",
+    tel: "",
   });
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    alert("button clicked");
-  };
-
-  const handleSubmit = () => {
-    alert("form submitted!");
-  };
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const navigate = useNavigate();
+
+  const handleValidation = () => {
+    const { password, confirmPassword, username, email } = values;
+
+    if (username.length < 4) {
+      toast.error("username should at least be 4 characters long!");
+      return false;
+    } else if (password !== confirmPassword) {
+      toast.error("password and confirm password should be the same");
+      return false;
+    } else if (password.length < 7) {
+      toast.error("password should be atleast 8 characters long!");
+    } else {
+      return true;
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (handleValidation() === true) {
+      const { username, email, password, confirmPassword, tel } = data;
+      Axios.post("/signUp", data)
+        .then((result) => console.log(result))
+        .catch((err) => console.log(err));
+    }
   };
 
   const handleSignIn = () => navigate("/signIn");
@@ -91,7 +114,7 @@ export const RegisterPage = () => {
               className="border-none w-full focus:outline-none text-gray-600"
               type="tel"
               placeholder="Phone number"
-              name="phone"
+              name="tel"
               onChange={handleChange}
             />
           </div>
@@ -107,7 +130,7 @@ export const RegisterPage = () => {
             <button
               className="flex justify-center items-center h-10 w-[20rem] bg-blue1 text-white text-xl font-bold hover:bg-blue-600 transition-all duration-300 ease-in-out"
               type="submit"
-              onClick={handleClick}
+              onClick={handleValidation}
             >
               Sign Up!
             </button>
@@ -147,6 +170,7 @@ export const RegisterPage = () => {
             </a>
           </div>
         </form>
+        <ToastContainer />
       </section>
     </main>
   );
