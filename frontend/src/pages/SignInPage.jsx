@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import {
   FaUser,
   FaLock,
@@ -9,17 +12,58 @@ import {
 } from "react-icons/fa";
 
 export const SignInPage = () => {
-  const handleChange = function () {};
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+  });
 
-  const handleSubmit = () => {
-    alert("form detected!");
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (handleValidation()) {
+      try {
+        axios
+          .post("http://localhost:4444/signIn", values)
+          .then((response) => {
+            if (response.status === 200) {
+              const successToast = toast.success("User logged in successfully");
+              navigate("/home");
+            } else {
+              toast.error("Failed to login due to a problem in the backend");
+            }
+          })
+          .catch((error) => {
+            console.log("error happened for the post for /signIn:", error);
+            toast.error("Failed to log in due to a problem in the frontend");
+          });
+      } catch (error) {
+        console.log("error happened for the post for /signIn:", error);
+        toast.error("Failed to log in due to a problem in the frontend");
+      }
+    }
+  };
+
+  const handleValidation = () => {
+    const { username, password } = values;
+
+    if (username.length < 4) {
+      toast.error("Username should be at least 4 characters long!");
+      return false;
+    } else if (password.length < 8) {
+      toast.error("Password should be at least 8 characters long!");
+      return false;
+    } else {
+      return true;
+    }
   };
 
   const navigate = useNavigate();
-
-  const handleClick = () => {
-    alert("hello world");
-  };
 
   const handleSignUp = () => navigate("/signUp");
 
@@ -39,6 +83,8 @@ export const SignInPage = () => {
               className="border-none w-full focus:outline-none text-gray-600"
               type="text"
               placeholder="Username"
+              onChange={handleChange}
+              name="username"
             />
           </div>
           <div className="input-box flex items-center border-b-2 border-gray-200 py-2 px-4 mb-4">
@@ -47,6 +93,8 @@ export const SignInPage = () => {
               className="border-none w-full focus:outline-none text-gray-600"
               type="password"
               placeholder="Password"
+              onChange={handleChange}
+              name="password"
             />
           </div>
 
@@ -65,7 +113,6 @@ export const SignInPage = () => {
             <button
               className="flex justify-center items-center h-10 w-[20rem] bg-blue1 text-white text-xl font-bold hover:bg-blue-600 transition-all duration-300 ease-in-out"
               type="submit"
-              onClick={handleClick}
             >
               Log in
             </button>
@@ -105,6 +152,7 @@ export const SignInPage = () => {
             </a>
           </div>
         </form>
+        <ToastContainer />
       </section>
     </main>
   );

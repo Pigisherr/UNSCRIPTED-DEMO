@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Axios } from "axios";
+import axios from "axios";
 
 import {
   FaUser,
@@ -14,7 +14,9 @@ import {
   FaPhone,
 } from "react-icons/fa";
 
-export const RegisterPage = () => {
+const RegisterPage = () => {
+  const navigate = useNavigate();
+
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -23,36 +25,51 @@ export const RegisterPage = () => {
     tel: "",
   });
 
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
-  const navigate = useNavigate();
-
   const handleValidation = () => {
     const { password, confirmPassword, username, email } = values;
 
     if (username.length < 4) {
-      toast.error("username should at least be 4 characters long!");
+      toast.error("Username should be at least 4 characters long!");
       return false;
     } else if (password !== confirmPassword) {
-      toast.error("password and confirm password should be the same");
+      toast.error("Password and confirm password should match");
       return false;
-    } else if (password.length < 7) {
-      toast.error("password should be atleast 8 characters long!");
+    } else if (password.length < 8) {
+      toast.error("Password should be at least 8 characters long!");
+      return false;
     } else {
       return true;
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (handleValidation() === true) {
-      const { username, email, password, confirmPassword, tel } = data;
-      Axios.post("/signUp", data)
-        .then((result) => console.log(result))
-        .catch((err) => console.log(err));
+
+    if (handleValidation()) {
+      try {
+        const response = await axios.post(
+          "http://localhost:4444/signUp",
+          values
+        );
+
+        if (response.status === 200) {
+          const successToast = toast.success("User created successfully");
+          navigate("/signIn");
+        } else {
+          toast.error("Failed to create user. Please try again later.");
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        toast.error("Failed to create user. Please try again later.");
+      }
     }
+  };
+
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSignIn = () => navigate("/signIn");
@@ -130,7 +147,6 @@ export const RegisterPage = () => {
             <button
               className="flex justify-center items-center h-10 w-[20rem] bg-blue1 text-white text-xl font-bold hover:bg-blue-600 transition-all duration-300 ease-in-out"
               type="submit"
-              onClick={handleValidation}
             >
               Sign Up!
             </button>
